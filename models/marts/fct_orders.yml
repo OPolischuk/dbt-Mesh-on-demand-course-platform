@@ -1,0 +1,63 @@
+version: 2
+
+models:
+  - name: fct_orders
+    latest_version: 2
+    description: "Fact table containing order information"
+    config:
+      contract:
+        enforced: true
+      group: finance # <-- belong to finance group
+      access: public # <-- other projects can use ref()
+    columns:
+      - name: order_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: primary_key
+      - name: location_id
+        data_type: varchar
+      - name: customer_id
+        data_type: varchar
+      - name: order_amount      # ← column from v2
+        data_type: number(28,6)
+      - name: tax_paid
+        data_type: number(28,6)
+      - name: ordered_at
+        data_type: timestamp_ntz
+      - name: customer_name
+        data_type: varchar
+      - name: location_name
+        data_type: varchar
+      - name: tax_rate
+        data_type: number(10,4)
+      - name: location_opened_at
+        data_type: timestamp_ntz
+      - name: ordered_month
+        data_type: number(2,0)
+      - name: ordered_day
+        data_type: number(2,0)
+      - name: ordered_year
+        data_type: number(4,0)
+      - name: location_ordered_at  # ← new column v2
+        data_type: date
+
+    versions:
+      - v: 2
+        config:
+          contract:
+            enforced: true
+
+      - v: 1
+        defined_in: fct_orders    # ← fct_orders.sql
+        config:
+          contract:
+            enforced: true
+          alias: fct_orders
+        columns:
+          - include: all
+            exclude:
+              - order_amount
+              - location_ordered_at
+          - name: order_total     # ← v1 to be order_total instead of order_amount
+            data_type: number(28,6)
