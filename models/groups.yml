@@ -1,0 +1,12 @@
+version: 2
+
+groups:
+  - name: finance
+    owner:
+      name: Finance Team
+      email: finance@company.com
+
+  - name: product
+    owner:
+      name: Product Team
+      email: product@company.com
